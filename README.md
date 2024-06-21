@@ -26,3 +26,26 @@ Each training and test samples is assigned to one of the following categories/la
 | 9	| Zebra |
 
 # Usage
+
+Loading data with Python (requires numpy, struct and gzip)
+Use utilities/spot-10-reader.py in this repo:
+        
+        import SPOT10Loader
+        X_train, y_train = SPOT10Loader.get_data(kind="Train")
+        X_test, y_test = SPOT10Loader.get_data(kind="Test")
+
+# Citing SPOTS-10
+If you use SPOTS-10 in a publication, we would appreciate references to the following paper:
+
+SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms. arXiv:xxxx.yyyy
+
+Biblatex entry:
+    
+    @online{
+    atanbori2024/online,
+    author = {John Atanbori},
+    title = {SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms},
+    date = {2024-08-12},
+    year = {2024},
+    eprinttype = {arXiv}
+    }
