@@ -5,7 +5,7 @@ set contains 10,000 images.
 Below are samples taken from the SPOTS-10 dataset were each row represents a category in the dataset and columns, variations of the samples in that category.
 
 # Getting the Data
-You can get the SPOTS-10 dataset by cloning this GitHub repository; the dataset appears under /dataset. This repo also contains some scripts for benchmark and visualization.
-    
+You can get the SPOTS-10 dataset by cloning this GitHub repository; the dataset appears under /dataset. This repo also contains some scripts for benchmark and the utilities folder that contains the files we used for making the MNIST-like dataset for SPOTS-10. You can also find some scripts that will help you load the train and test dataset and labels into a numpy array for training your benchmark model.
+
     git clone git@github.com:Amotica/SPOTS-10.git 
 
