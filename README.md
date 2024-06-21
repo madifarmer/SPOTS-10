@@ -26,9 +26,10 @@ Each training and test samples is assigned to one of the following categories/la
 | 9	| Zebra |
 
 # Usage
-Loading data with Python (requires numpy, struct and gzip)
-Use utilities/spot-10-reader.py in this repo:
 
-import SPOT10Loader
-X_train, y_train = SPOT10Loader.get_data(kind="Train")
-X_test, y_test = SPOT10Loader.get_data(kind="Test")
+        Loading data with Python (requires numpy, struct and gzip)
+        Use utilities/spot-10-reader.py in this repo:
+        
+        import SPOT10Loader
+        X_train, y_train = SPOT10Loader.get_data(kind="Train")
+        X_test, y_test = SPOT10Loader.get_data(kind="Test")
