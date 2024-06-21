@@ -37,7 +37,7 @@ Use utilities/spot-10-reader.py in this repo:
 # Citing SPOTS-10
 If you use SPOTS-10 in a publication, we would appreciate references to the following paper:
 
-        SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms. arXiv:xxxx.yyyy
+SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms. arXiv:xxxx.yyyy
 
 Biblatex entry:
     
