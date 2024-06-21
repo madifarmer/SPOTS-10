@@ -12,17 +12,17 @@ You can get the SPOTS-10 dataset by cloning this GitHub repository; the dataset 
 # Categories (Labels)
 Each training and test samples is assigned to one of the following categories/labels:
 
-| Label	| Description |
+| Label ID	| Category |
 | ----- | ----------- |
-| 0	| T-shirt/top |
-| 1	| Trouser |
-| 2	| Pullover |
-| 3	| Dress |
-| 4	| Coat |
-| 5	| Sandal |
-| 6	| Shirt |
-| 7	| Sneaker |
-| 8	| Bag |
-| 9	| Ankle boot |
+| 0	| Cheetah |
+| 1	| Deer |
+| 2	| Giraffe |
+| 3	| Hyena |
+| 4	| Jaguar |
+| 5	| Leopard |
+| 6	| Tapir Calf |
+| 7	| Tiger |
+| 8	| Whale Shark |
+| 9	| Zebra |
 
 # Usage
