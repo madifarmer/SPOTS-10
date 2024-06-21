@@ -27,8 +27,8 @@ Each training and test samples is assigned to one of the following categories/la
 
 # Usage
 
-        Loading data with Python (requires numpy, struct and gzip)
-        Use utilities/spot-10-reader.py in this repo:
+Loading data with Python (requires numpy, struct and gzip)
+Use utilities/spot-10-reader.py in this repo:
         
         import SPOT10Loader
         X_train, y_train = SPOT10Loader.get_data(kind="Train")
