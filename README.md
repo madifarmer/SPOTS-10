@@ -33,3 +33,20 @@ Use utilities/spot-10-reader.py in this repo:
         import SPOT10Loader
         X_train, y_train = SPOT10Loader.get_data(kind="Train")
         X_test, y_test = SPOT10Loader.get_data(kind="Test")
+
+# Citing SPOTS-10
+If you use SPOTS-10 in a publication, we would appreciate references to the following paper:
+
+SPOTS-10: ANIMAL PATTERN BENCHMARK DATASET FOR MACHINE LEARNING ALGORITHMS. arXiv:xxxx.yyyy
+
+Biblatex entry:
+
+        @online{xiao2017/online,
+          author       = {Han Xiao and Kashif Rasul and Roland Vollgraf},
+          title        = {Fashion-MNIST: a Novel Image Dataset for Benchmarking Machine     Learning Algorithms},
+          date         = {2017-08-28},
+          year         = {2017},
+          eprintclass  = {cs.LG},
+          eprinttype   = {arXiv},
+          eprint       = {cs.LG/1708.07747},
+        }
