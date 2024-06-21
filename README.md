@@ -7,4 +7,5 @@ Below are samples taken from the SPOTS-10 dataset were each row represents a cat
 # Getting the Data
 You can get the SPOTS-10 dataset by cloning this GitHub repository; the dataset appears under /dataset. This repo also contains some scripts for benchmark and visualization.
 
-git clone git@github.com:zalandoresearch/fashion-mnist.git
+git clone git@github.com:Amotica/SPOTS-10.git
+
