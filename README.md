@@ -9,3 +9,6 @@ You can get the SPOTS-10 dataset by cloning this GitHub repository; the dataset 
 
 git clone git@github.com:Amotica/SPOTS-10.git
 
+function test() {
+  console.log("This code will have a copy button to the right of it");
+}
