@@ -26,3 +26,11 @@ Each training and test samples is assigned to one of the following categories/la
 | 9	| Zebra |
 
 # Usage
+Loading data with Python (requires numpy, struct and gzip)
+Use utilities/spot-10-reader.py in this repo:
+
+import SPOT10Loader
+data_loader = SPOT10Loader(dataset_dir="../dataset")
+data, labels = data_loader.get_data(kind="Train")
+X_train, y_train = mnist_reader.load_mnist('data/fashion', kind='train')
+X_test, y_test = mnist_reader.load_mnist('data/fashion', kind='t10k')
