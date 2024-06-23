@@ -1,91 +1,97 @@
-import cv2
-import os
+import tensorflow as tf
+from tensorflow.keras.layers import Conv2D, Dense, Dropout, GlobalAveragePooling2D, Input, Lambda
+from tensorflow.keras import applications
+from tensorflow.keras.models import Model
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+#from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.backend import resize_images
+from utitlities.spot_10_reader import SPOT10Loader
+
+def build_model(model_name=None, num_classes=10, weights='imagenet', input_shape=(32, 32, 1)):
+    input_layer = Input(shape=input_shape)
+    # Convert the grayscale input to 3 channels
+    x = Conv2D(3, (1, 1), padding='same')(input_layer)
+    # Resize the image to the required size for the pre-trained models
+    x = Lambda(lambda image: resize_images(image, height_factor=3, width_factor=3, data_format='channels_last'))(x)
+
+    base_model = None
+
+    if model_name == "Xception":
+        base_model = applications.Xception(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "ResNet50":
+        base_model = applications.ResNet50(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "InceptionV3":
+        base_model = applications.InceptionV3(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "InceptionResNetV2":
+        base_model = applications.InceptionResNetV2(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "MobileNet":
+        base_model = applications.MobileNet(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "MobileNetV2":
+        base_model = applications.MobileNetV2(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "DenseNet121":
+        base_model = applications.DenseNet121(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "NASNetMobile":
+        base_model = applications.NASNetMobile(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "EfficientNetB0":
+        base_model = applications.EfficientNetB0(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "EfficientNetB1":
+        base_model = applications.EfficientNetB1(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "EfficientNetB2":
+        base_model = applications.EfficientNetB2(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    elif model_name == "EfficientNetB3":
+        base_model = applications.EfficientNetB3(input_shape=(x.shape[1], x.shape[2], x.shape[3]), include_top=False, weights=weights)
+    else:
+        raise ValueError("Please specify a valid model!")
+
+    x = base_model(x, training=False)
+
+    # Add global average pooling layer
+    x = GlobalAveragePooling2D()(x)
+    # Add a fully-connected layer and a softmax layer with num_classes outputs
+    predictions = Dense(num_classes, activation='softmax')(x)
+
+    model = Model(inputs=input_layer, outputs=predictions)
+    return model
+
+# Load data
+X_train, y_train = SPOT10Loader.get_data(dataset_dir="dataset", kind="train")
+X_test, y_test = SPOT10Loader.get_data(dataset_dir="dataset", kind="test")
+
+# Normalize the data
+X_train = X_train.astype('float32') / 255.0
+X_test = X_test.astype('float32') / 255.0
+
+# Reshape the data to include the channel dimension
+X_train = tf.expand_dims(X_train, axis=-1)
+X_test = tf.expand_dims(X_test, axis=-1)
+
+# One-hot encode the labels
+y_train = tf.keras.utils.to_categorical(y_train, num_classes=10)
+y_test = tf.keras.utils.to_categorical(y_test, num_classes=10)
 
 
-def extract_patch(image, center, patch_size, scaling_factor):
-    if center is None:
-        return None
 
-    x, y = center
-    x_original, y_original = int(x / scaling_factor), int(y / scaling_factor)
+# Build and compile model
+model = build_model(model_name="DenseNet121")
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.summary()
 
-    half_size = int(patch_size / (2 * scaling_factor))
+# Callbacks
+callbacks = [
+    EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True),
+    ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
+]
 
-    # Ensure the patch coordinates are within the image boundaries
-    if (x_original - half_size < 0 or x_original + half_size >= image.shape[1] or
-            y_original - half_size < 0 or y_original + half_size >= image.shape[0]):
-        return None
+# Train model
+history = model.fit(
+    X_train, y_train,
+    batch_size=32,
+    validation_data=(X_test, y_test),
+    epochs=100,
+    callbacks=callbacks
+)
 
-    patch = image[y_original - half_size:y_original + half_size, x_original - half_size:x_original + half_size]
-    return patch
-
-
-def click_callback(event, x, y, flags, param):
-    global click_position, mouse_down
-    if event == cv2.EVENT_LBUTTONDOWN:
-        click_position = (x, y)
-        mouse_down = True
-    elif event == cv2.EVENT_LBUTTONUP:
-        mouse_down = False
-
-
-def main():
-    spotted_animal = "giraffe1"
-    split = "train"
-
-    input_folder = "../spotted_animals/" + split + "/" + spotted_animal
-    output_folder = "../spotted_animals/" + split + "/" + spotted_animal + "_90_click"
-    patch_size = 90
-
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    image_files = [f for f in os.listdir(input_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-
-    for image_file in image_files:
-        original_image = cv2.imread(os.path.join(input_folder, image_file))
-
-        if original_image is None:
-            print(f"Error loading image: {image_file}")
-            continue
-
-        global click_position, mouse_down
-        click_position = None
-        mouse_down = False
-
-        # Resize the image to 800x600 if it's larger
-        #if original_image.shape[0] > 600 or original_image.shape[1] > 800:
-        original_image = cv2.resize(original_image, (800, 600))
-        # Calculate the scaling factor based on the original and displayed image sizes
-        scaling_factor = max(original_image.shape[0] / 600, original_image.shape[1] / 800)
-
-
-        cv2.namedWindow("Image")
-        cv2.setMouseCallback("Image", click_callback)
-
-        patch_id = 0
-        while True:
-            cv2.imshow("Image", original_image)
-
-            key = cv2.waitKey(1)
-            if key == 27:  # Press 'Esc' to exit
-                cv2.destroyAllWindows()
-                exit()
-            elif key == 13:  # Press 'Enter' to move to the next image
-                cv2.destroyAllWindows()
-                break
-
-            if mouse_down and click_position is not None:
-                patch = extract_patch(original_image, click_position, patch_size, scaling_factor)
-
-                if patch is not None and patch.size != 0:  # Check if the patch is valid
-                    output_path = os.path.join(output_folder, f"{image_file}_patch_{patch_id}.png")
-                    cv2.imwrite(output_path, patch)
-                    print(f"Patch saved: {output_path}")
-                    patch_id += 1
-
-                # Reset click_position to avoid saving multiple patches for the same click event
-                click_position = None
-
-if __name__ == "__main__":
-    main()
+# Evaluate model
+loss, accuracy = model.evaluate(X_test, y_test)
+print(f"Test Loss: {loss}")
+print(f"Test Accuracy: {accuracy}")
