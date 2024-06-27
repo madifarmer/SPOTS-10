@@ -108,4 +108,7 @@ if __name__ == "__main__":
                         "EfficientNetB1", "EfficientNetB2", "EfficientNetB3", "ConvNeXtTiny"]
 
     trainer = ModelTrainer(benchmark_models)
-    trainer.train_models()
+
+    model = trainer.build_model(model_name="ResNet50")
+    #model.summary()
+    #trainer.train_models()
