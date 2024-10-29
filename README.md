@@ -44,20 +44,20 @@ SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms. [arX
 **Biblatex entry:**
 
     @online{
-    2410.21044,
-    Author = {John Atanbori},
-    Title = {SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms},
-    Year = {2024},
-    Eprint = {2410.21044},
-    Eprinttype = {arXiv},
+        2410.21044,
+        Author = {John Atanbori},
+        Title = {SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms},
+        Year = {2024},
+        Eprint = {2410.21044},
+        Eprinttype = {arXiv},
     }
 
 **BibTex entry:**
 
-@misc{
-    2410.21044,
-    Author = {John Atanbori},
-    Title = {SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms},
-    Year = {2024},
-    Eprint = {arXiv:2410.21044},
-}
+    @misc{
+        2410.21044,
+        Author = {John Atanbori},
+        Title = {SPOTS-10: Animal Pattern Benchmark Dataset for Machine Learning Algorithms},
+        Year = {2024},
+        Eprint = {arXiv:2410.21044},
+    }
